@@ -6,6 +6,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:guess_the_box/constant/constant.dart';
 
+enum types { bomb, points10 }
+
 class GuessTheBox extends StatefulWidget {
   const GuessTheBox({super.key});
 
@@ -16,97 +18,221 @@ class GuessTheBox extends StatefulWidget {
 class _GuessTheBoxState extends State<GuessTheBox> {
   /* -------------------------------- List container------------------------------- */
   bool isGameOver = false;
-  //   Container(
-  //     width: 150,
-  //     height: 150,
-  //     decoration: const BoxDecoration(
-  //       image: DecorationImage(image: AssetImage('assets/rewardimage.png')),
-  //       borderRadius: BorderRadius.all(Radius.circular(20)),
-  //       boxShadow: <BoxShadow>[
-  //         BoxShadow(
-  //             color: Colors.redAccent, offset: Offset(3, 4), blurRadius: 5)
-  //       ],
-  //     ),
-  //   ),
-  //   Container(
-  //     width: 150,
-  //     height: 150,
-  //     decoration: const BoxDecoration(
-  //       image: DecorationImage(image: AssetImage('assets/rewardimage.png')),
-  //       borderRadius: BorderRadius.all(Radius.circular(20)),
-  //       boxShadow: <BoxShadow>[
-  //         BoxShadow(
-  //             color: Colors.redAccent, offset: Offset(3, 4), blurRadius: 5)
-  //       ],
-  //     ),
-  //   ),
-  //   Container(
-  //     width: 150,
-  //     height: 150,
-  //     decoration: const BoxDecoration(
-  //       image: DecorationImage(image: AssetImage('assets/rewardimage.png')),
-  //       borderRadius: BorderRadius.all(Radius.circular(20)),
-  //       boxShadow: <BoxShadow>[
-  //         BoxShadow(
-  //             color: Colors.redAccent, offset: Offset(3, 4), blurRadius: 5)
-  //       ],
-  //     ),
-  //   ),
-  //   Container(
-  //     width: 150,
-  //     height: 150,
-  //     decoration: const BoxDecoration(
-  //       image: DecorationImage(image: AssetImage('assets/rewardimage.png')),
-  //       borderRadius: BorderRadius.all(Radius.circular(20)),
-  //       boxShadow: <BoxShadow>[
-  //         BoxShadow(
-  //             color: Colors.redAccent, offset: Offset(3, 4), blurRadius: 5)
-  //       ],
-  //     ),
-  //   ),
-  // ];
 
   List<String> rewards = [
     "assets/reward1.jpg",
-    "assets/reward2.jpeg",
+    "assets/reward2.jpg",
     "assets/reward3.jpg",
-    "assets/reeward4.jpg",
+    "assets/bomby.jpg",
   ];
   /* -------------------------------- variable -------------------------------- */
-
   List<String>? suffledRewards;
-  int? rewardContainer;
+  int? bombcontainerindex;
+  int? rewardcontainerindex;
   List<bool> isContainerTapped = [false, false, false, false];
   String displayImage = '';
-  String displayImage1 = '';
-
+  String displaysuffledimage = '';
+  int level = 1;
+  int coin = 0;
+  String message = '';
   @override
   void initState() {
     super.initState();
-    rewardContainer = Random().nextInt(4);
     suffledRewards = List<String>.from(rewards)..shuffle();
-    displayImage = 'assets/${suffledRewards![rewardContainer!]}';
-    print("display Image : $displayImage");
+    bombcontainerindex = rewards.length;
+    rewardcontainerindex = Random().nextInt(rewards.length);
+    displayImage = 'assets/${suffledRewards![rewardcontainerindex!]}';
   }
 
   /* -------------------------------- function -------------------------------- */
 
+  void resetgame() {
+    setState(() {
+      suffledRewards = List<String>.from(rewards)..shuffle();
+      rewardcontainerindex = Random().nextInt(rewards.length);
+      displayImage = 'assets/${suffledRewards![rewardcontainerindex!]}';
+      setState(() {
+        isGameOver = true;
+        coin += 50;
+      });
+    });
+  }
+
+  void playAgain() {
+    setState(() {
+      rewardcontainerindex = Random().nextInt(rewards.length);
+      suffledRewards = List<String>.from(rewards)..shuffle();
+      isGameOver = false;
+      displayImage = 'assets/${suffledRewards![rewardcontainerindex!]}';
+      level = 1;
+      coin = 0;
+    });
+  }
+
   void onContainerTap(int selectedContainer) {
-    if (selectedContainer == rewardContainer) {
+    if (selectedContainer == rewardcontainerindex) {
       setState(() {
         isContainerTapped[selectedContainer] = true;
+        level++;
       });
     } else {
       setState(() {
         isContainerTapped[selectedContainer] = false;
+        level++;
       });
     }
 
     Future.delayed(const Duration(seconds: 1), () {
-      if (selectedContainer == rewardContainer) {
+      if (selectedContainer == rewardcontainerindex) {
         setState(() {
           isGameOver = true;
         });
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              child: Column(
+                children: [
+                  const Text(
+                    'Oops! you lose ',
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      displayImage
+                      // suffledRewards![selectedContainer]
+                      ,
+                      color: Colors.transparent,
+                      fit: BoxFit.cover,
+                      height: 200,
+                      width: 200,
+                    ),
+                  ),
+                  const Text(
+                    'you didnt get prize',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          alignment: Alignment.bottomCenter,
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                  image: AssetImage('assets/reeward4.jpg'),
+                                  fit: BoxFit.cover),
+                              color: ColorList.tilecolor,
+                              border: Border.all(
+                                  color: ColorList.bordercolor, width: 3),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10))),
+                          child: const Text(
+                            '1019',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                  image: AssetImage('assets/reward3.jpg'),
+                                  fit: BoxFit.cover),
+                              color: ColorList.tilecolor,
+                              border: Border.all(
+                                  color: ColorList.bordercolor, width: 3),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10))),
+                        )
+                      ],
+                    ),
+                  ),
+                  const Text(
+                    'Your next Box is guaranted prize',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                          style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.red)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            setState(() {
+                              isGameOver = true;
+                            });
+                            Timer(const Duration(seconds: 2), () {
+                              displaysuffledimage = suffledRewards![
+                                  rewardcontainerindex!.toInt()];
+                            });
+                          },
+                          child: const Text(
+                            'Give Up',
+                            style: TextStyle(fontSize: 16),
+                          )),
+                      ElevatedButton(
+                          style: const ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                  Color.fromARGB(255, 4, 217, 11))),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            resetgame();
+
+                            // Timer(const Duration(seconds: 2), () {
+                            //   displayImage1 =
+                            //       suffledRewards![bombContainer!.toInt()];
+                            // });
+                          },
+                          child: const Text(
+                            'play on \$20',
+                            style: TextStyle(fontSize: 16),
+                          ))
+                    ],
+                  ),
+                  ElevatedButton(
+                      style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                              Color.fromARGB(255, 4, 217, 11))),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          isGameOver = false;
+                        });
+                        Timer(const Duration(seconds: 1), () {
+                          displaysuffledimage =
+                              suffledRewards![rewardcontainerindex!.toInt()];
+                        });
+                        playAgain();
+                      },
+                      child: const Text(
+                        'Play again',
+                        style: TextStyle(fontSize: 16),
+                      )),
+                ],
+              ),
+            );
+          },
+        );
+      } else {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -203,8 +329,8 @@ class _GuessTheBoxState extends State<GuessTheBox> {
                               isGameOver = true;
                             });
                             Timer(const Duration(seconds: 2), () {
-                              displayImage1 =
-                                  suffledRewards![rewardContainer!.toInt()];
+                              displaysuffledimage = suffledRewards![
+                                  rewardcontainerindex!.toInt()];
                             });
                           },
                           child: const Text(
@@ -221,8 +347,8 @@ class _GuessTheBoxState extends State<GuessTheBox> {
                               isGameOver = true;
                             });
                             Timer(const Duration(seconds: 2), () {
-                              displayImage1 =
-                                  suffledRewards![rewardContainer!.toInt()];
+                              displaysuffledimage = suffledRewards![
+                                  rewardcontainerindex!.toInt()];
                             });
                           },
                           child: const Text(
@@ -237,179 +363,18 @@ class _GuessTheBoxState extends State<GuessTheBox> {
                               Color.fromARGB(255, 4, 217, 11))),
                       onPressed: () {
                         Navigator.of(context).pop();
-                        setState(() {
-                          isGameOver = true;
-                        });
+
                         Timer(const Duration(seconds: 2), () {
-                          displayImage1 =
-                              suffledRewards![rewardContainer!.toInt()];
+                          displaysuffledimage =
+                              suffledRewards![selectedContainer];
                         });
+                        resetgame();
+                        isGameOver = false;
                       },
                       child: const Text(
-                        'play on ads',
+                        'Next level',
                         style: TextStyle(fontSize: 16),
                       ))
-                ],
-              ),
-            );
-          },
-        );
-      } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              backgroundColor: Colors.transparent,
-              child: Column(
-                children: [
-                  const Text(
-                    'Oops! you lose ',
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      suffledRewards![selectedContainer],
-                      color: Colors.transparent,
-                      fit: BoxFit.cover,
-                      height: 200,
-                      width: 200,
-                    ),
-                  ),
-                  const Text(
-                    'you didnt get prize',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          alignment: Alignment.bottomCenter,
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                  image: AssetImage('assets/reeward4.jpg'),
-                                  fit: BoxFit.cover),
-                              color: ColorList.tilecolor,
-                              border: Border.all(
-                                  color: ColorList.bordercolor, width: 3),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
-                          child: const Text(
-                            '1019',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                  image: AssetImage('assets/reward3.jpg'),
-                                  fit: BoxFit.cover),
-                              color: ColorList.tilecolor,
-                              border: Border.all(
-                                  color: ColorList.bordercolor, width: 3),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Text(
-                    'Your next Box is guaranted prize',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                          style: const ButtonStyle(
-                              backgroundColor:
-                                  MaterialStatePropertyAll(Colors.red)),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              isGameOver = true;
-                            });
-                            Timer(const Duration(seconds: 2), () {
-                              displayImage1 =
-                                  suffledRewards![rewardContainer!.toInt()];
-                            });
-                          },
-                          child: const Text(
-                            'Give Up',
-                            style: TextStyle(fontSize: 16),
-                          )),
-                      ElevatedButton(
-                          style: const ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(
-                                  Color.fromARGB(255, 4, 217, 11))),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              isGameOver = true;
-                            });
-                            Timer(const Duration(seconds: 2), () {
-                              displayImage1 =
-                                  suffledRewards![rewardContainer!.toInt()];
-                            });
-                          },
-                          child: const Text(
-                            'play on \$20',
-                            style: TextStyle(fontSize: 16),
-                          ))
-                    ],
-                  ),
-                  ElevatedButton(
-                      style: const ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
-                              Color.fromARGB(255, 4, 217, 11))),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        setState(() {
-                          isGameOver = false;
-                        });
-                        // Timer(const Duration(seconds: 2), () {
-                        //   displayImage1 =
-                        //       suffledRewards![rewardContainer!.toInt()];
-                        // });
-                      },
-                      child: const Text(
-                        'play on ads',
-                        style: TextStyle(fontSize: 16),
-                      )),
-                  ElevatedButton(
-                      style: const ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
-                              Color.fromARGB(255, 4, 217, 11))),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        setState(() {
-                          isGameOver = true;
-                        });
-                        Timer(const Duration(seconds: 2), () {
-                          displayImage1 =
-                              suffledRewards![rewardContainer!.toInt()];
-                        });
-                      },
-                      child: const Text(
-                        'ok',
-                        style: TextStyle(fontSize: 16),
-                      )),
                 ],
               ),
             );
@@ -418,37 +383,6 @@ class _GuessTheBoxState extends State<GuessTheBox> {
       }
     });
   }
-
-  // void checkAllContainers() {
-  //   bool allContainersChecked = true;
-  //   for (int i = 0; i < containers.length; i++) {
-  //     if (!isContainerTapped[i]) {
-  //       allContainersChecked = false;
-  //       break;
-  //     }
-  //   }
-
-  //   if (allContainersChecked) {
-  //     showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: const Text('All containers checked!'),
-  //           content:
-  //               const Text('Congratulations, you\'ve won all the rewards!'),
-  //           actions: <Widget>[
-  //             TextButton(
-  //               onPressed: () {
-  //                 Navigator.of(context).pop();
-  //               },
-  //               child: const Text('OK'),
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     );
-  //   }
-  // }
 
   /* -------------------------------------------------------------------------- */
   /*                            widget build start                            */
@@ -460,6 +394,7 @@ class _GuessTheBoxState extends State<GuessTheBox> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorList.appbarcolor,
+        title: Text('level: ${level.toString()} '),
         actions: [
           Padding(
             padding: const EdgeInsets.all(12),
@@ -481,12 +416,11 @@ class _GuessTheBoxState extends State<GuessTheBox> {
               decoration: BoxDecoration(
                   color: ColorList.backgroundcolor,
                   borderRadius: const BorderRadius.all(Radius.circular(14))),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [Icon(Icons.money), Text('3714')],
-                ),
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [const Icon(Icons.money), Text(coin.toString())]),
               ),
             ),
           ),
@@ -528,13 +462,14 @@ class _GuessTheBoxState extends State<GuessTheBox> {
                 width: double.infinity,
                 color: ColorList.bordercolor,
               ),
+              /* -------------------------------- level row ------------------------------- */
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
                   color: ColorList.backgroundcolor,
                   child: Row(
                     children: [
-                      for (int i = 0; i < 10; i++)
+                      for (int i = 0; i < 1000; i++)
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Container(
@@ -629,7 +564,7 @@ class _GuessTheBoxState extends State<GuessTheBox> {
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          if (!isGameOver || isContainerTapped[index]) {
+                          if (!isGameOver && index != rewardcontainerindex) {
                             onContainerTap(index);
                           }
                         },
