@@ -6,8 +6,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:guess_the_box/constant/constant.dart';
 
-enum types { bomb, points10 }
-
 class GuessTheBox extends StatefulWidget {
   const GuessTheBox({super.key});
 
@@ -34,13 +32,12 @@ class _GuessTheBoxState extends State<GuessTheBox> {
   String displaysuffledimage = '';
   int level = 1;
   int coin = 0;
-  String message = '';
+
   @override
   void initState() {
     super.initState();
     suffledRewards = List<String>.from(rewards)..shuffle();
-    bombcontainerindex = rewards.length;
-    rewardcontainerindex = Random().nextInt(rewards.length);
+    rewardcontainerindex = rewards.length > 3 ? 3 : 0;
     displayImage = 'assets/${suffledRewards![rewardcontainerindex!]}';
   }
 
@@ -49,10 +46,10 @@ class _GuessTheBoxState extends State<GuessTheBox> {
   void resetgame() {
     setState(() {
       suffledRewards = List<String>.from(rewards)..shuffle();
-      rewardcontainerindex = Random().nextInt(rewards.length);
+      rewardcontainerindex = rewards.length > 3 ? 3 : 0;
       displayImage = 'assets/${suffledRewards![rewardcontainerindex!]}';
       setState(() {
-        isGameOver = true;
+        isGameOver = false;
         coin += 50;
       });
     });
@@ -60,7 +57,7 @@ class _GuessTheBoxState extends State<GuessTheBox> {
 
   void playAgain() {
     setState(() {
-      rewardcontainerindex = Random().nextInt(rewards.length);
+      rewardcontainerindex = rewards.length > 3 ? 3 : 0;
       suffledRewards = List<String>.from(rewards)..shuffle();
       isGameOver = false;
       displayImage = 'assets/${suffledRewards![rewardcontainerindex!]}';
@@ -104,9 +101,8 @@ class _GuessTheBoxState extends State<GuessTheBox> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.asset(
-                      displayImage
-                      // suffledRewards![selectedContainer]
-                      ,
+                      displaysuffledimage =
+                          suffledRewards![rewardcontainerindex!.toInt()],
                       color: Colors.transparent,
                       fit: BoxFit.cover,
                       height: 200,
@@ -250,7 +246,8 @@ class _GuessTheBoxState extends State<GuessTheBox> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.asset(
-                      suffledRewards![selectedContainer],
+                      displaysuffledimage =
+                          suffledRewards![rewardcontainerindex!.toInt()],
                       fit: BoxFit.cover,
                       height: 150,
                       width: 150,
@@ -363,13 +360,12 @@ class _GuessTheBoxState extends State<GuessTheBox> {
                               Color.fromARGB(255, 4, 217, 11))),
                       onPressed: () {
                         Navigator.of(context).pop();
-
-                        Timer(const Duration(seconds: 2), () {
-                          displaysuffledimage =
-                              suffledRewards![selectedContainer];
-                        });
-                        resetgame();
-                        isGameOver = false;
+                        isGameOver = true;
+                        // Timer(const Duration(seconds: 1), () {
+                        //   displaysuffledimage =
+                        //       suffledRewards![rewardcontainerindex!.toInt()];
+                        // });
+                        // resetgame();
                       },
                       child: const Text(
                         'Next level',
@@ -564,7 +560,7 @@ class _GuessTheBoxState extends State<GuessTheBox> {
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          if (!isGameOver && index != rewardcontainerindex) {
+                          if (!isGameOver) {
                             onContainerTap(index);
                           }
                         },

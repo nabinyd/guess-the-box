@@ -12,9 +12,6 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: GuessTheBox(),
-      // GuessTheBoxes(),
-      // GuessTheBox(),
-      // Ui2(),
     );
   }
 }
