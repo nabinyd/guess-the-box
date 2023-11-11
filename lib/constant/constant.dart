@@ -15,3 +15,13 @@ class ColorList {
 
   static Color rewardbanner = const Color.fromARGB(255, 255, 68, 0);
 }
+
+class Rewards {
+  String assetname;
+  int? coin;
+  Rewards({required this.assetname, this.coin});
+}
+
+List<Rewards> rewardlist = [
+  Rewards(assetname: "assets/", coin: 30),
+];
