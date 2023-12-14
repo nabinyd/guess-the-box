@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:guess_the_box/ui.dart';
+import 'package:guess_the_box/screen/homescreen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -9,9 +9,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: GuessTheBox(),
+      home: const HomePage(),
+      routes: {
+        HomePage.routename: (context) => const HomePage(),
+      },
     );
   }
 }
