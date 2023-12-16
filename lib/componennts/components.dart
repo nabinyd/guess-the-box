@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:guess_the_box/constant/constant.dart';
+
 import 'package:guess_the_box/screen/homescreen.dart';
 
 mixin CustomComponents {
@@ -42,9 +42,15 @@ mixin CustomComponents {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm'),
-          content: const Text('Do you want to exit game?'),
-          actions: <Widget>[
+          title: const Text(
+            'Confirm',
+            textAlign: TextAlign.center,
+          ),
+          content: const Text(
+            'Do you want to exit game?',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, HomePage.routename);
@@ -70,9 +76,15 @@ mixin CustomComponents {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm'),
-          content: const Text('Do you want to exit game?'),
-          actions: <Widget>[
+          title: const Text(
+            'Confirm',
+            textAlign: TextAlign.center,
+          ),
+          content: const Text(
+            'Do you want to exit game?',
+            textAlign: TextAlign.center,
+          ),
+          actions: [
             TextButton(
               onPressed: () {
                 Navigator.popUntil(
@@ -95,6 +107,7 @@ mixin CustomComponents {
   static Future<dynamic> infoDialog(BuildContext context) {
     return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           backgroundColor: const Color.fromARGB(255, 131, 68, 45),
@@ -102,7 +115,7 @@ mixin CustomComponents {
             title: const Text(
               "Guess The Box",
               style: TextStyle(
-                fontSize: 21,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -111,64 +124,51 @@ mixin CustomComponents {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              color: Colors.redAccent,
+              color: Colors.red,
               highlightColor: Colors.redAccent,
               style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.white)),
+                backgroundColor: MaterialStatePropertyAll(Colors.white),
+              ),
               icon: const Icon(Icons.close),
             ),
           ),
           content: Container(
             height: 200,
             decoration: const BoxDecoration(
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  blurRadius: 10,
-                  spreadRadius: -10,
-                  offset: Offset(0, 1),
-                  color: Color.fromARGB(255, 65, 29, 16),
-                ),
-                BoxShadow(
-                  blurRadius: 5,
-                  spreadRadius: 0,
-                  offset: Offset(0, 1),
-                  color: Color.fromARGB(255, 102, 41, 17),
-                ),
-              ],
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
               ),
             ),
             child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Expanded(
-                  child: Text(
-                    '1. Guess the box for a chance to win a prize',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
+                Text(
+                  '1. Guess the box for a chance to win a prize',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    '2. The higher the level the higher the prizes',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
+                Text(
+                  '2. The higher the level the higher the prizes',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    '3. You will lose all rewaards if the wrong option is selected',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
+                Text(
+                  '3. You will lose all rewaards if the wrong option is selected',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    '4. Jackpots have Guaranteed prizes!',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
+                Text(
+                  '4. Jackpots have Guaranteed prizes!',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
               ],

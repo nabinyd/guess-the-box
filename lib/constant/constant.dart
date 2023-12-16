@@ -15,10 +15,8 @@ class ColorList {
 
 class MyTextstyle {
   static TextStyle displaylarge = const TextStyle(
-    fontSize: 17,
+    fontSize: 20,
     color: Colors.white,
     fontWeight: FontWeight.bold,
   );
 }
-
-ButtonStyle buttonStyle = const ButtonStyle();
