@@ -133,8 +133,10 @@ mixin CustomComponents {
             ),
           ),
           content: Container(
-            height: 200,
+            height: 250,
+            padding: const EdgeInsets.all(10),
             decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 114, 53, 30),
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
               ),
@@ -148,6 +150,7 @@ mixin CustomComponents {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    fontSize: 18,
                   ),
                 ),
                 Text(
@@ -155,6 +158,7 @@ mixin CustomComponents {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    fontSize: 18,
                   ),
                 ),
                 Text(
@@ -162,6 +166,7 @@ mixin CustomComponents {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    fontSize: 18,
                   ),
                 ),
                 Text(
@@ -169,6 +174,7 @@ mixin CustomComponents {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                    fontSize: 18,
                   ),
                 ),
               ],
