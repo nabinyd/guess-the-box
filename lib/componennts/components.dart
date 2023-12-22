@@ -2,38 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:guess_the_box/screen/homescreen.dart';
 
 mixin CustomComponents {
-  static Future showLeaveConfirmationDialog(
-      BuildContext context, bool exit) async {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm'),
-          content: const Text('Do you want to give up?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(exit);
-              },
-              child: const Text('No'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(exit);
-              },
-              child: const Text('Yes'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   static Future showGiveUpDialog(
     BuildContext context,
   ) async {
@@ -42,61 +13,123 @@ mixin CustomComponents {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: const Color.fromARGB(248, 178, 75, 37),
+          elevation: 50,
+          shadowColor: Colors.brown,
+          alignment: Alignment.center,
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          titleTextStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 21,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.2),
           title: const Text(
-            'Confirm',
+            "Confirm",
             textAlign: TextAlign.center,
           ),
-          content: const Text(
-            'Do you want to exit game?',
-            textAlign: TextAlign.center,
+          content: Container(
+            height: 200,
+            width: 200,
+            padding: const EdgeInsets.all(10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              gradient: const RadialGradient(colors: [
+                Color.fromRGBO(110, 56, 19, 1),
+                Color.fromARGB(255, 57, 1, 1),
+              ], radius: 1.5, focal: Alignment.center, focalRadius: 0.3),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Text(
+              "Do you want to exit app?",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, HomePage.routename);
-              },
-              child: const Text('No'),
-            ),
-            TextButton(
-              onPressed: () {
+            InkWell(
+              onTap: () {
                 SystemNavigator.pop();
               },
-              child: const Text('Yes'),
+              child: Container(
+                width: 120,
+                height: 45,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 164, 9, 7), width: 3),
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: const LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 195, 18, 6),
+                        Color.fromRGBO(210, 3, 3, 1),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      stops: [0.1, 0.8]),
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          const Color.fromARGB(255, 79, 1, 1).withOpacity(0.8),
+                      spreadRadius: 6,
+                      blurRadius: 50,
+                      offset: const Offset(3, 3),
+                    )
+                  ],
+                  // borderRadius: const BorderRadius.all(Radius.circular(40)),
+                ),
+                child: const Text(
+                  "Yes",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      letterSpacing: 1),
+                ),
+              ),
             ),
-          ],
-        );
-      },
-    );
-  }
-
-  static Future showGiveUpWinBoxDialog(BuildContext context) async {
-    return showDialog(
-      context: context,
-      useSafeArea: false,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Confirm',
-            textAlign: TextAlign.center,
-          ),
-          content: const Text(
-            'Do you want to exit game?',
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName(HomePage.routename));
+            InkWell(
+              onTap: () {
+                Navigator.of(context).popAndPushNamed(HomePage.routename);
               },
-              child: const Text('No'),
-            ),
-            TextButton(
-              onPressed: () {
-                SystemNavigator.pop();
-              },
-              child: const Text('Yes'),
+              child: Container(
+                width: 120,
+                height: 45,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 147, 191, 28), width: 3),
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: const LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 2, 150, 7),
+                        Color.fromARGB(255, 29, 173, 3),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      stops: [0.1, 0.8]),
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          const Color.fromARGB(255, 79, 1, 1).withOpacity(0.8),
+                      spreadRadius: 6,
+                      blurRadius: 50,
+                      offset: const Offset(3, 3),
+                    )
+                  ],
+                ),
+                child: const Text(
+                  "No",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      letterSpacing: 1),
+                ),
+              ),
             ),
           ],
         );
@@ -184,4 +217,6 @@ mixin CustomComponents {
       },
     );
   }
+
+ 
 }

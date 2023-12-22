@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:guess_the_box/screen/auth/loginscreen.dart';
 import 'package:guess_the_box/screen/homescreen.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 1), () {
+    Timer(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomePage()));
     });
@@ -34,14 +37,18 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
         child: Center(
-            child: Text(
-          "GuessTheBox",
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * 0.1,
-            fontWeight: FontWeight.bold,
-            color: const Color.fromARGB(255, 255, 255, 255),
+          child: GradientText(
+            'Guess The Box',
+            style: GoogleFonts.manrope(
+              fontSize: 40,
+              fontWeight: FontWeight.w900,
+            ),
+            colors: const [
+              Color.fromARGB(255, 219, 181, 179),
+              Color.fromARGB(255, 194, 164, 164),
+            ],
           ),
-        )),
+        ),
       ),
     );
   }

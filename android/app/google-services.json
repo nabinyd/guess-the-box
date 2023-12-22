@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "474658639331",
+    "project_id": "guessthebox-b5778",
+    "storage_bucket": "guessthebox-b5778.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:474658639331:android:3dad383e6df86194fbe4d6",
+        "android_client_info": {
+          "package_name": "com.example.guess_the_box"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDj1uekM1vAAl2DRFt_ro_a9KPDW0GEpWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
