@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_the_box/screen/auth/loginscreen.dart';
-import 'package:guess_the_box/screen/homescreen.dart';
+import 'package:guess_the_box/screen/homepage/homescreen.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class SplashScreen extends StatefulWidget {

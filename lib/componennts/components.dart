@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:guess_the_box/screen/homescreen.dart';
+import 'package:guess_the_box/screen/homepage/homescreen.dart';
 
 mixin CustomComponents {
   static Future showGiveUpDialog(

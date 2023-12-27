@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:guess_the_box/screen/auth/firebaseservice.dart';
+import 'package:guess_the_box/screen/homepage/homescreen.dart';
+import 'package:guess_the_box/services/firebaseservice.dart';
 import 'package:guess_the_box/screen/auth/loginscreen.dart';
 import 'package:guess_the_box/screen/reward/wincoinscreen.dart';
+import 'package:guess_the_box/services/sharedprefsservice.dart';
 
 class LeaveWithReward extends StatefulWidget {
   final VoidCallback playAgain;
@@ -24,8 +27,8 @@ class LeaveWithReward extends StatefulWidget {
 class _LeaveWithRewardState extends State<LeaveWithReward> {
   @override
   Widget build(BuildContext context) {
-    print(widget.userId);
-    print(widget.coin);
+    // print(widget.userId);
+    // print(widget.coin);
     String userID = widget.userId.toString();
 
     return widget.userId == null
@@ -56,7 +59,7 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
                 "Please login to save your rewards",
                 textAlign: TextAlign.center,
                 style: GoogleFonts.dmSans(
-                    fontSize: 22,
+                    fontSize: 19,
                     fontWeight: FontWeight.bold,
                     color: const Color.fromARGB(255, 246, 226, 206),
                     shadows: [
@@ -76,11 +79,22 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
             actions: [
               InkWell(
                 onTap: () async {
+                  User? user =
+                      await FirebaseLoginServices().signInwithGoogle(context);
+                  if (user != null) {
+                    final localProgress = await SharedPrefs.getLocalCoin();
+                    await CoinManager.saveCoins(user.uid, localProgress);
+                    await FirebaseMessingServices.displaySimpleNotification(
+                        title: "Login successful",
+                        body: "welcome ${user.displayName}!",
+                        payload: "login_payload");
+                  }
+
                   await Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const LogInPage()));
+                      builder: (context) => const HomePage()));
                 },
                 child: Container(
-                  width: 120,
+                  width: 100,
                   height: 45,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -121,7 +135,7 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
                   Navigator.of(context).pop();
                 },
                 child: Container(
-                  width: 120,
+                  width: 100,
                   height: 45,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -159,6 +173,7 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
               ),
             ],
           )
+        /* --------------------------- if user is loggedin -------------------------- */
         : AlertDialog(
             backgroundColor: const Color.fromARGB(248, 178, 75, 37),
             elevation: 50,
@@ -206,7 +221,7 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
                           CoinScreen(coin: widget.coin!.toInt())));
                 },
                 child: Container(
-                  width: 120,
+                  width: 100,
                   height: 45,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -247,7 +262,7 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
                   Navigator.of(context).pop();
                 },
                 child: Container(
-                  width: 120,
+                  width: 100,
                   height: 45,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(

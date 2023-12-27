@@ -1,10 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:guess_the_box/screen/auth/firebaseservice.dart';
-import 'package:guess_the_box/screen/homescreen.dart';
+import 'package:guess_the_box/services/firebaseservice.dart';
+import 'package:guess_the_box/screen/homepage/homescreen.dart';
+import 'package:guess_the_box/services/sharedprefsservice.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class LogInPage extends StatefulWidget {
@@ -38,7 +40,7 @@ class _LogInPageState extends State<LogInPage> {
                   padding: const EdgeInsets.only(top: 45, right: 25),
                   child: GestureDetector(
                     onTap: () async {
-                      await FirebaseServices().signOut();
+                      await FirebaseLoginServices().signOut();
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const HomePage()));
                     },
@@ -121,20 +123,29 @@ class _LogInPageState extends State<LogInPage> {
                       ),
                     ]),
                 colors: const [
-                  Color.fromARGB(255, 226, 224, 221),
-                  Color.fromARGB(255, 244, 242, 241),
+                  Color.fromARGB(255, 209, 206, 202),
+                  Color.fromARGB(255, 233, 222, 216),
                 ],
               ),
             ),
             GestureDetector(
               onTap: () async {
-                await FirebaseServices().signInwithGoogle();
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const HomePage()));
+                User? user =
+                    await FirebaseLoginServices().signInwithGoogle(context);
+                if (user != null) {
+                  await CoinManager.retrieveCoins(user.uid) ?? 0;
+                  await FirebaseMessingServices.displaySimpleNotification(
+                      title: "Login successful",
+                      body: "welcome ${user.displayName}!",
+                      payload: "login_payload");
+                  await Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => const HomePage()));
+                }
               },
               child: Container(
                 height: 50,
                 width: 250,
+                margin: const EdgeInsets.only(bottom: 30),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -161,22 +172,9 @@ class _LogInPageState extends State<LogInPage> {
                 ),
               ),
             ),
-            const SizedBox(),
           ],
         ),
       ),
     );
   }
-
-  // signInwithGoogle() async {
-  //   GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  //   GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-  //   AuthCredential credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth!.accessToken,
-  //     idToken: googleAuth.idToken,
-  //   );
-  //   UserCredential userCredential =
-  //       await FirebaseAuth.instance.signInWithCredential(credential);
-  //   print(userCredential.user?.email);
-  // }
 }

@@ -142,20 +142,20 @@ class _LostDialogBoxState extends State<LostDialogBox> {
                     ]),
               ),
             ),
-            Text(
-              "Your next box is a guaranteed prize!",
-              style: GoogleFonts.manrope(
-                  color: const Color.fromARGB(255, 221, 172, 137),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  shadows: [
-                    const Shadow(
-                      color: Colors.brown,
-                      offset: Offset(3, 3),
-                      blurRadius: 15.0,
-                    )
-                  ]),
-            ),
+            // Text(
+            //   "Your next box is a guaranteed prize!",
+            //   style: GoogleFonts.manrope(
+            //       color: const Color.fromARGB(255, 221, 172, 137),
+            //       fontSize: 18,
+            //       fontWeight: FontWeight.w800,
+            //       shadows: [
+            //         const Shadow(
+            //           color: Colors.brown,
+            //           offset: Offset(3, 3),
+            //           blurRadius: 15.0,
+            //         )
+            //       ]),
+            // ),
             SizedBox(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

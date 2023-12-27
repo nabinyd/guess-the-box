@@ -1,8 +1,9 @@
-// ignore_for_file: sized_box_for_whitespace, avoid_print
+// ignore_for_file: sized_box_for_whitespace, avoid_print, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
@@ -10,10 +11,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:guess_the_box/componennts/components.dart';
 import 'package:guess_the_box/componennts/leavewithreward.dart';
+import 'package:guess_the_box/componennts/messagescreen.dart';
+import 'package:guess_the_box/componennts/pushnotification.dart';
 import 'package:guess_the_box/constant/constant.dart';
-import 'package:guess_the_box/screen/auth/firebaseservice.dart';
+import 'package:guess_the_box/services/firebaseservice.dart';
 import 'package:guess_the_box/screen/auth/loginscreen.dart';
 import 'package:guess_the_box/screen/reward/lostdialogbox.dart';
+import 'package:guess_the_box/services/sharedprefsservice.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -27,11 +31,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   /* -------------------------------- variable -------------------------------- */
-
-  final ItemScrollController itemScrollController = ItemScrollController();
   String? userId = FirebaseAuth.instance.currentUser?.uid;
 
+  final ItemScrollController itemScrollController = ItemScrollController();
+
   bool isGameOver = false;
+
   List<String> rewards = [
     "assets/reward1.jpg",
     "assets/reward2.jpeg",
@@ -50,31 +55,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late int coin = 0;
   int countbox = 0;
   int jackpotlevel = 5;
-  bool showButton = false;
+  bool showLeaveWithRewardButton = false;
 
   /* -------------------------------- function -------------------------------- */
-
-  @override
-  void initState() {
-    loadCoin();
-    super.initState();
-  }
-
   loadCoin() async {
     coin = await CoinManager.retrieveCoins(userId.toString()) ?? 0;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    loadCoin();
+  }
+
+  
+
   void onContainerTap(int selectedContainer, BuildContext context) {
     suffledRewards = List<String>.from(rewards)..shuffle();
-    // print("before adding suffeled rewards are: $suffledRewards");
     var suffledbombindex = suffledRewards!.indexOf('assets/bomby.jpg');
     rewardcontainerindex = Random().nextInt(rewards.length);
     bombcontainerindex = suffledbombindex;
-
-    // print("suffledreward = $suffledRewards");
-    // print("selectedcontainer = $selectedContainer");
-    // print("rewardcontainerindex = $rewardcontainerindex");
-    // print("bombcontainerindex = $bombcontainerindex");
+    SharedPrefs.saveProgress(coin);
 
     if (selectedContainer == bombcontainerindex) {
       setState(() {
@@ -84,17 +85,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         });
 
         displaysuffledimage = suffledRewards![selectedContainer];
-        // print("bombcontainer image = $displaysuffledimage");
       });
     } else {
       setState(() {
         isContainerTapped[selectedContainer] = true;
+        displaysuffledimage = suffledRewards![selectedContainer];
         if (level == 3) {
           rewards.add("assets/bomby.jpg");
-          // print("after adding $rewards");
-          // print("After adding suffeled rewards are: $suffledRewards");
         }
-        displaysuffledimage = suffledRewards![selectedContainer];
         if (level % 5 == 0) {
           jackpotlevel = level + 5;
         }
@@ -107,12 +105,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           context: context,
           builder: (_) {
             return LostDialogBox(
-              displaysuffledimage: displaysuffledimage,
-              playAgain: playAgain,
-              isGameOver: isGameOver,
-              level: level,
-              points: coin,
-            );
+                displaysuffledimage: displaysuffledimage,
+                playAgain: playAgain,
+                isGameOver: isGameOver,
+                level: level,
+                points: coin);
           },
         );
       } else {
@@ -135,7 +132,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       isGameOver = false;
       level++;
       if (level >= 3) {
-        showButton = true;
+        showLeaveWithRewardButton = true;
       }
     });
 
@@ -162,11 +159,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       countbox = 0;
       jackpotlevel = 5;
       itemScrollController.scrollTo(
-        index: level - 1,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.linear,
-      );
-      showButton = false;
+          index: level - 1,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.linear);
+      showLeaveWithRewardButton = false;
       if (level < 3) {
         rewards.remove("assets/bomby.jpg");
       }
@@ -179,7 +175,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print("userID = $userId");
+    // print("userID = $userId");
 
     return Scaffold(
       extendBody: false,
@@ -245,7 +241,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           userId == null
                               ? IconButton(
                                   onPressed: () async {
-                                    await FirebaseServices().signOut();
+                                    await FirebaseLoginServices().signOut();
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -258,9 +254,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   ))
                               : IconButton(
                                   onPressed: () async {
-                                    await GoogleSignIn().signOut();
+                                    await FirebaseLoginServices().signOut();
                                     // await CoinManager.saveCoins(
                                     //     userId.toString(), coin);
+                                    //   saving coin to firebase before logging out
+                                    // final localProgress =
+                                    //     await SharedPrefs.getLocalCoin();
+                                    // await CoinManager.saveCoins(
+                                    //     userId.toString(), localProgress);
                                     Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -313,12 +314,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             InkWell(
                               onTap: () {
                                 CustomComponents.infoDialog(context);
+                                PushnotificationApi.sendNotification();
                               },
-                              child: const Icon(
-                                Icons.info_outline_rounded,
-                                color: Colors.lightBlueAccent,
-                                size: 28,
-                              ),
+                              child: const Icon(Icons.info_outline_rounded,
+                                  color: Colors.lightBlueAccent, size: 28),
                             ),
                           ],
                         ),
@@ -340,87 +339,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                     ),
                     /* -------------------------------- level row ------------------------------- */
-                    Container(
-                      height: 50,
-                      child: ScrollablePositionedList.builder(
-                        scrollDirection: Axis.horizontal,
+                    levelRow(
                         itemScrollController: itemScrollController,
-                        itemCount: 1000,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            height: 40,
-                            alignment: Alignment.center,
-                            margin: const EdgeInsets.only(left: 10),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 203, 63, 12),
-                              shape: BoxShape.rectangle,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                              border: Border.all(
-                                color: level == index + 1
-                                    ? const Color.fromARGB(255, 241, 217, 4)
-                                    : Colors.transparent,
-                                width: 4,
-                              ),
-                              boxShadow: const [
-                                BoxShadow(
-                                  blurRadius: 15,
-                                  color: Color.fromARGB(255, 93, 47, 4),
-                                  offset: Offset(1, 1),
-                                ),
-                                BoxShadow(
-                                  blurRadius: 15,
-                                  color: Color.fromARGB(255, 103, 54, 4),
-                                  offset: Offset(-1, -1),
-                                ),
-                              ],
-                            ),
-                            width: 50,
-                            child: (index + 1) % 5 == 0
-                                ? const Icon(
-                                    Icons.star,
-                                    size: 26,
-                                    color: Color.fromARGB(255, 249, 216, 5),
-                                  )
-                                : Text(
-                                    "${index + 1}",
-                                    style: GoogleFonts.manrope(
-                                        color: const Color.fromARGB(
-                                            255, 206, 214, 57),
-                                        fontSize: 21,
-                                        fontWeight: FontWeight.w800,
-                                        shadows: [
-                                          const Shadow(
-                                            color: Color.fromARGB(
-                                                255, 166, 141, 52),
-                                            offset: Offset(1, 1),
-                                            blurRadius: 8.0,
-                                          ),
-                                          const Shadow(
-                                            color: Color.fromARGB(
-                                                255, 166, 141, 52),
-                                            offset: Offset(-1, -1),
-                                            blurRadius: 8.0,
-                                          ),
-                                          const Shadow(
-                                            color: Color.fromARGB(
-                                                255, 166, 141, 52),
-                                            offset: Offset(1, -1),
-                                            blurRadius: 8.0,
-                                          ),
-                                          const Shadow(
-                                            color: Color.fromARGB(
-                                                255, 166, 141, 52),
-                                            offset: Offset(-1, 1),
-                                            blurRadius: 8.0,
-                                          ),
-                                        ]),
-                                  ),
-                          );
-                        },
-                      ),
-                    ),
+                        level: level),
                     Material(
                       elevation: 20,
                       child: Container(
@@ -529,7 +450,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 child: Padding(
                   padding: const EdgeInsets.all(15),
                   child: GridView.builder(
-                    // physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -545,6 +465,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           if (!isGameOver) {
                             onContainerTap(index, context);
                           }
+                          print("the selected box = $index");
                         },
                         child: !isGameOver
                             ? Container(
@@ -644,7 +565,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ],
                       ),
                     ),
-                    showButton
+                    showLeaveWithRewardButton
                         ? Flexible(
                             child: InkWell(
                               onTap: () async {
@@ -700,6 +621,97 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class levelRow extends StatelessWidget {
+  const levelRow({
+    super.key,
+    required this.itemScrollController,
+    required this.level,
+  });
+
+  final ItemScrollController itemScrollController;
+  final int level;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      child: ScrollablePositionedList.builder(
+        scrollDirection: Axis.horizontal,
+        itemScrollController: itemScrollController,
+        itemCount: 1000,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            height: 40,
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(left: 10),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 203, 63, 12),
+              shape: BoxShape.rectangle,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
+              ),
+              border: Border.all(
+                color: level == index + 1
+                    ? const Color.fromARGB(255, 241, 217, 4)
+                    : Colors.transparent,
+                width: 4,
+              ),
+              boxShadow: const [
+                BoxShadow(
+                  blurRadius: 15,
+                  color: Color.fromARGB(255, 93, 47, 4),
+                  offset: Offset(1, 1),
+                ),
+                BoxShadow(
+                  blurRadius: 15,
+                  color: Color.fromARGB(255, 103, 54, 4),
+                  offset: Offset(-1, -1),
+                ),
+              ],
+            ),
+            width: 50,
+            child: (index + 1) % 5 == 0
+                ? const Icon(
+                    Icons.star,
+                    size: 26,
+                    color: Color.fromARGB(255, 249, 216, 5),
+                  )
+                : Text(
+                    "${index + 1}",
+                    style: GoogleFonts.manrope(
+                        color: const Color.fromARGB(255, 206, 214, 57),
+                        fontSize: 21,
+                        fontWeight: FontWeight.w800,
+                        shadows: [
+                          const Shadow(
+                            color: Color.fromARGB(255, 166, 141, 52),
+                            offset: Offset(1, 1),
+                            blurRadius: 8.0,
+                          ),
+                          const Shadow(
+                            color: Color.fromARGB(255, 166, 141, 52),
+                            offset: Offset(-1, -1),
+                            blurRadius: 8.0,
+                          ),
+                          const Shadow(
+                            color: Color.fromARGB(255, 166, 141, 52),
+                            offset: Offset(1, -1),
+                            blurRadius: 8.0,
+                          ),
+                          const Shadow(
+                            color: Color.fromARGB(255, 166, 141, 52),
+                            offset: Offset(-1, 1),
+                            blurRadius: 8.0,
+                          ),
+                        ]),
+                  ),
+          );
+        },
       ),
     );
   }
