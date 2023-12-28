@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,39 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC7L2Zs5aOIAGKkdtCX0NCgxwMZ1P4v1eE',
-    appId: '1:474658639331:web:eac3d15bfb16f370fbe4d6',
-    messagingSenderId: '474658639331',
-    projectId: 'guessthebox-b5778',
-    authDomain: 'guessthebox-b5778.firebaseapp.com',
-    storageBucket: 'guessthebox-b5778.appspot.com',
-    measurementId: 'G-SPCC5XTCQG',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDj1uekM1vAAl2DRFt_ro_a9KPDW0GEpWo',
-    appId: '1:474658639331:android:3dad383e6df86194fbe4d6',
-    messagingSenderId: '474658639331',
-    projectId: 'guessthebox-b5778',
-    storageBucket: 'guessthebox-b5778.appspot.com',
+    apiKey: 'AIzaSyCUABIUDI2LIuEzhXGOtI6Yc6GCP5HKEPA',
+    appId: '1:606885648568:android:00cf91ae2011058e61fc4d',
+    messagingSenderId: '606885648568',
+    projectId: 'guessthebox-9af68',
+    storageBucket: 'guessthebox-9af68.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAmKhskHypO5MEYTdstvhNe2dA8JKPLbhk',
-    appId: '1:474658639331:ios:5ffaac1063c86427fbe4d6',
-    messagingSenderId: '474658639331',
-    projectId: 'guessthebox-b5778',
-    storageBucket: 'guessthebox-b5778.appspot.com',
-    iosBundleId: 'com.example.guessTheBox',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAmKhskHypO5MEYTdstvhNe2dA8JKPLbhk',
-    appId: '1:474658639331:ios:1169f09236d85477fbe4d6',
-    messagingSenderId: '474658639331',
-    projectId: 'guessthebox-b5778',
-    storageBucket: 'guessthebox-b5778.appspot.com',
-    iosBundleId: 'com.example.guessTheBox.RunnerTests',
+    apiKey: 'AIzaSyA2JAG_grAiftCa35EzE5HhO3Gm5Hsi-i8',
+    appId: '1:606885648568:ios:1ff24060db18b11261fc4d',
+    messagingSenderId: '606885648568',
+    projectId: 'guessthebox-9af68',
+    storageBucket: 'guessthebox-9af68.appspot.com',
+    iosBundleId: 'com.guessthebox.app',
   );
 }

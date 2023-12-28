@@ -68,8 +68,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     loadCoin();
   }
 
-  
-
   void onContainerTap(int selectedContainer, BuildContext context) {
     suffledRewards = List<String>.from(rewards)..shuffle();
     var suffledbombindex = suffledRewards!.indexOf('assets/bomby.jpg');
@@ -134,7 +132,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (level >= 3) {
         showLeaveWithRewardButton = true;
       }
+      if (level < 3) {
+        rewards.remove("assets/bomby.jpg");
+      }
     });
+    
 
     if (suffledRewards![selectedContainer] == 'assets/reward1.jpg') {
       coin += 50;

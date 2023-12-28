@@ -133,11 +133,10 @@ class _LogInPageState extends State<LogInPage> {
                 User? user =
                     await FirebaseLoginServices().signInwithGoogle(context);
                 if (user != null) {
-                  await CoinManager.retrieveCoins(user.uid) ?? 0;
-                  await FirebaseMessingServices.displaySimpleNotification(
-                      title: "Login successful",
-                      body: "welcome ${user.displayName}!",
-                      payload: "login_payload");
+                  // await FirebaseMessingServices.displaySimpleNotification(
+                  //     title: "Login successful",
+                  //     body: "welcome ${user.displayName}!",
+                  //     payload: "login_payload");
                   await Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => const HomePage()));
                 }

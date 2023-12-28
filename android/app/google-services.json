@@ -1,26 +1,59 @@
 {
   "project_info": {
-    "project_number": "474658639331",
-    "project_id": "guessthebox-b5778",
-    "storage_bucket": "guessthebox-b5778.appspot.com"
+    "project_number": "606885648568",
+    "project_id": "guessthebox-9af68",
+    "storage_bucket": "guessthebox-9af68.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:474658639331:android:3dad383e6df86194fbe4d6",
+        "mobilesdk_app_id": "1:606885648568:android:00cf91ae2011058e61fc4d",
         "android_client_info": {
-          "package_name": "com.example.guess_the_box"
+          "package_name": "com.guessthebox.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "606885648568-0j26jfdngovtho2337onc9huu5gavgbl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.guessthebox.app",
+            "certificate_hash": "ef0b27d9204b9a6fcc78804be3f9539af214011b"
+          }
+        },
+        {
+          "client_id": "606885648568-2o6sbtsppoac0nshv65pqqt0rk8qvkh9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.guessthebox.app",
+            "certificate_hash": "88fe89829c7cb3c2c2eff5e5aec0dcbea4612a0b"
+          }
+        },
+        {
+          "client_id": "606885648568-a4am0rpj63t2fapnf3qdg2n86o296vi3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDj1uekM1vAAl2DRFt_ro_a9KPDW0GEpWo"
+          "current_key": "AIzaSyCUABIUDI2LIuEzhXGOtI6Yc6GCP5HKEPA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "606885648568-a4am0rpj63t2fapnf3qdg2n86o296vi3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "606885648568-l56aa2n0gmmm1vt5vtt9ns6v1nl0vphc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.guessthebox.app"
+              }
+            }
+          ]
         }
       }
     }
