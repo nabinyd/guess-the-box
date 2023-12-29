@@ -136,7 +136,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         rewards.remove("assets/bomby.jpg");
       }
     });
-    
 
     if (suffledRewards![selectedContainer] == 'assets/reward1.jpg') {
       coin += 50;
