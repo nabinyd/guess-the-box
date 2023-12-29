@@ -10,6 +10,7 @@ import 'package:guess_the_box/services/sharedprefsservice.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class LogInPage extends StatefulWidget {
+  static const String routename = "/loginpage";
   const LogInPage({super.key});
 
   @override
@@ -19,6 +20,9 @@ class LogInPage extends StatefulWidget {
 class _LogInPageState extends State<LogInPage> {
   @override
   Widget build(BuildContext context) {
+    bool isleavingWithReward =
+        ModalRoute.of(context)!.settings.arguments != null;
+    print("isleaving with reward = $isleavingWithReward");
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -132,14 +136,25 @@ class _LogInPageState extends State<LogInPage> {
               onTap: () async {
                 User? user =
                     await FirebaseLoginServices().signInwithGoogle(context);
-                if (user != null) {
-                  // await FirebaseMessingServices.displaySimpleNotification(
-                  //     title: "Login successful",
-                  //     body: "welcome ${user.displayName}!",
-                  //     payload: "login_payload");
+                if (user != null && mounted) {
+                  final localProgress = isleavingWithReward
+                      ? await SharedPrefs.getLocalCoin()
+                      : null;
+
+                  isleavingWithReward
+                      ? await CoinManager.saveCoins(
+                          user.uid, localProgress!.toInt())
+                      : null;
+
                   await Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => const HomePage()));
                 }
+                // if (user != null) {
+                //   await FirebaseMessingServices.displaySimpleNotification(
+                //       title: "Login successful",
+                //       body: "welcome ${user.displayName}!",
+                //       payload: "login_payload");
+                // }
               },
               child: Container(
                 height: 50,

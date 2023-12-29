@@ -78,20 +78,21 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
             ),
             actions: [
               InkWell(
-                onTap: () async {
-                  User? user =
-                      await FirebaseLoginServices().signInwithGoogle(context);
-                  if (user != null) {
-                    final localProgress = await SharedPrefs.getLocalCoin();
-                    await CoinManager.saveCoins(user.uid, localProgress);
-                    await FirebaseMessingServices.displaySimpleNotification(
-                        title: "Login successful",
-                        body: "welcome ${user.displayName}!",
-                        payload: "login_payload");
-                  }
+                onTap: () {
+                  // User? user =
+                  //     await FirebaseLoginServices().signInwithGoogle(context);
+                  // if (user != null && mounted) {
+                    // final localProgress = await SharedPrefs.getLocalCoin();
+                    // await CoinManager.saveCoins(user.uid, localProgress);
+                  //   await FirebaseMessingServices.displaySimpleNotification(
+                  //       title: "Login successful",
+                  //       body: "welcome ${user.displayName}!",
+                  //       payload: "login_payload");
+                  // }
 
-                  await Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const HomePage()));
+                  Navigator.of(context).pushReplacementNamed(
+                      LogInPage.routename,
+                      arguments: true);
                 },
                 child: Container(
                   width: 100,
