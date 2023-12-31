@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         isContainerTapped[selectedContainer] = true;
         Timer(const Duration(milliseconds: 100), () {
           isGameOver = true;
+          rewards.remove("assets/bomby.jpg");
         });
 
         displaysuffledimage = suffledRewards![selectedContainer];
@@ -131,10 +132,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       level++;
       if (level >= 3) {
         showLeaveWithRewardButton = true;
+        // rewards.add("assets/bomby.jpg");
       }
-      if (level < 3) {
-        rewards.remove("assets/bomby.jpg");
-      }
+      // if (level < 3) {
+      //   rewards.remove("assets/bomby.jpg");
+      // }
     });
 
     if (suffledRewards![selectedContainer] == 'assets/reward1.jpg') {
@@ -164,8 +166,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           duration: const Duration(milliseconds: 500),
           curve: Curves.linear);
       showLeaveWithRewardButton = false;
-      if (level < 3) {
-        rewards.remove("assets/bomby.jpg");
+      if (level >= 3) {
+        // rewards.add("assets/bomby.jpg");
       }
     });
   }
@@ -469,56 +471,68 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           print("the selected box = $index");
                         },
                         child: !isGameOver
-                            ? Container(
-                                decoration: BoxDecoration(boxShadow: [
-                                  BoxShadow(
-                                    color: const Color.fromARGB(255, 79, 1, 1)
-                                        .withOpacity(0.4),
-                                    spreadRadius: 8,
-                                    blurRadius: 25,
-                                    offset: const Offset(1, 1),
-                                  )
-                                ]),
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                  child: Image.asset(
-                                    'assets/rewardimage.jpeg',
-                                    fit: BoxFit.cover,
-                                  ).animate().shake(
-                                      duration: 300.milliseconds,
-                                      delay: 500.milliseconds),
-                                )
-                                    .animate()
-                                    .moveY(duration: 400.ms, begin: -800)
-                                    .shake(
-                                      duration: 500.milliseconds,
-                                      delay: 500.milliseconds,
-                                    ),
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Container(
+                                    decoration: BoxDecoration(boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            const Color.fromARGB(255, 79, 1, 1)
+                                                .withOpacity(0.4),
+                                        spreadRadius: 8,
+                                        blurRadius: 25,
+                                        offset: const Offset(1, 1),
+                                      )
+                                    ]),
+                                    child: ClipRRect(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20)),
+                                        child: Image.asset(
+                                          'assets/rewardimage.jpeg',
+                                          fit: BoxFit.cover,
+                                        ))),
                               )
-                            : Container(
-                                decoration: BoxDecoration(boxShadow: [
-                                  BoxShadow(
-                                    color: const Color.fromARGB(255, 79, 1, 1)
-                                        .withOpacity(0.4),
-                                    spreadRadius: 8,
-                                    blurRadius: 10,
-                                    offset: const Offset(1, 1),
-                                  )
-                                ]),
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                  child: Image.asset(
-                                    suffledRewards![index],
-                                    fit: BoxFit.cover,
-                                  )
-                                      .animate()
-                                      .shake(duration: 400.milliseconds)
-                                      .then(delay: 200.milliseconds)
-                                      .moveX(end: -500),
-                                ),
-                              ),
+                                .animate()
+                                .moveX(duration: 300.ms, begin: 300)
+                                .shake(
+                                    delay: 400.milliseconds,
+                                    hz: 3,
+                                    rotation: 0.2)
+                                .fade(duration: 400.milliseconds, delay: 100.ms)
+                                .shake(
+                                    delay: 1.seconds,
+                                    duration: 700.ms,
+                                    hz: 2.2,
+                                    rotation: 0.25)
+                                .fade(delay: 200.ms, duration: 400.ms)
+                            : Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
+                                    child: Container(
+                                      decoration: BoxDecoration(boxShadow: [
+                                        BoxShadow(
+                                          color: const Color.fromARGB(
+                                                  255, 79, 1, 1)
+                                              .withOpacity(0.4),
+                                          spreadRadius: 8,
+                                          blurRadius: 10,
+                                          offset: const Offset(1, 1),
+                                        )
+                                      ]),
+                                      child: ClipRRect(
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(20)),
+                                          child: Image.asset(
+                                            suffledRewards![index],
+                                            fit: BoxFit.cover,
+                                          )),
+                                    ))
+                                .animate()
+                                .shake(
+                                    delay: 400.milliseconds,
+                                    hz: 3,
+                                    rotation: 0.2),
                       );
                     },
                   ),

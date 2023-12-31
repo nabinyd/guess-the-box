@@ -10,7 +10,7 @@ import 'package:guess_the_box/services/sharedprefsservice.dart';
 
 class LeaveWithReward extends StatefulWidget {
   final VoidCallback playAgain;
-  int? coin = 0;
+  int coin;
   String? userId;
 
   LeaveWithReward({
@@ -82,8 +82,8 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
                   // User? user =
                   //     await FirebaseLoginServices().signInwithGoogle(context);
                   // if (user != null && mounted) {
-                    // final localProgress = await SharedPrefs.getLocalCoin();
-                    // await CoinManager.saveCoins(user.uid, localProgress);
+                  // final localProgress = await SharedPrefs.getLocalCoin();
+                  // await CoinManager.saveCoins(user.uid, localProgress);
                   //   await FirebaseMessingServices.displaySimpleNotification(
                   //       title: "Login successful",
                   //       body: "welcome ${user.displayName}!",
@@ -216,10 +216,10 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
               InkWell(
                 onTap: () async {
                   await CoinManager.saveCoins(
-                      widget.userId.toString(), widget.coin!.toInt());
+                      widget.userId.toString(), widget.coin);
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) =>
-                          CoinScreen(coin: widget.coin!.toInt())));
+                      builder: (context) => CoinScreen(
+                          coin: widget.coin, playagain: widget.playAgain)));
                 },
                 child: Container(
                   width: 100,
