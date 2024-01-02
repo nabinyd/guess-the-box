@@ -149,6 +149,7 @@ class FirebaseMessingServices {
         .doc(userId)
         .set(deviceToken)
         .then((value) {
+          
       print("Firebase Token and timestamp added successfully");
     }).catchError((error) {
       print("Failed to add the FCM token $error");

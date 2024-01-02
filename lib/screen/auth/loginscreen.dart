@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guess_the_box/screen/homepage/mainscreen.dart';
 
 import 'package:guess_the_box/services/firebaseservice.dart';
 import 'package:guess_the_box/screen/homepage/homescreen.dart';
@@ -46,7 +47,7 @@ class _LogInPageState extends State<LogInPage> {
                     onTap: () async {
                       await FirebaseLoginServices().signOut();
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const HomePage()));
+                          builder: (context) => const MainScreen()));
                     },
                     child: Container(
                       height: 30,
