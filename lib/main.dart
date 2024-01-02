@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:guess_the_box/screen/homepage/mainscreen.dart';
 import 'package:guess_the_box/services/firebaseservice.dart';
 import 'package:guess_the_box/screen/auth/loginscreen.dart';
 import 'package:guess_the_box/screen/homepage/homescreen.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
       routes: {
         HomePage.routename: (context) => const HomePage(),
         LogInPage.routename: (context) => const LogInPage(),
+        MainScreen.routename: (context) => const MainScreen(),
       },
     );
   }

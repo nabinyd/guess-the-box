@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guess_the_box/screen/homepage/homescreen.dart';
+import 'package:guess_the_box/screen/homepage/mainscreen.dart';
 
 mixin CustomComponents {
   static Future showGiveUpDialog(
@@ -40,7 +41,7 @@ mixin CustomComponents {
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Text(
-              "Do you want to exit app?",
+              "You will losse your prizes by leaving",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 19,
@@ -52,7 +53,7 @@ mixin CustomComponents {
           actions: [
             InkWell(
               onTap: () {
-                SystemNavigator.pop();
+                Navigator.pushReplacementNamed(context, MainScreen.routename);
               },
               child: Container(
                 width: 120,
@@ -217,6 +218,4 @@ mixin CustomComponents {
       },
     );
   }
-
- 
 }
