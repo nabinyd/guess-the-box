@@ -2,14 +2,13 @@ import 'package:countup/countup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-import 'package:guess_the_box/constant/constant.dart';
-import 'package:guess_the_box/screen/reward/winchestscreen.dart';
+import 'package:guess_the_box/screen/homepage/homescreen.dart';
 
 class CoinScreen extends StatefulWidget {
   int coin;
-  CoinScreen({super.key, required this.coin});
+   VoidCallback playagain;
+  CoinScreen({super.key, required this.coin,required this.playagain});
 
   @override
   State<CoinScreen> createState() => _CoinScreenState();
@@ -95,7 +94,7 @@ class _CoinScreenState extends State<CoinScreen> {
                       child: Text(
                         "Congratulations!!",
                         style: GoogleFonts.poppins(
-                            fontSize: 22,
+                            fontSize: 20,
                             fontWeight: FontWeight.w900,
                             color: const Color.fromARGB(255, 230, 221, 218),
                             letterSpacing: 1,
@@ -173,7 +172,8 @@ class _CoinScreenState extends State<CoinScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  SystemNavigator.pop();
+                  
+                  Navigator.of(context).pushNamed(HomePage.routename);
                 },
                 style: ButtonStyle(
                   side: const MaterialStatePropertyAll(BorderSide(
