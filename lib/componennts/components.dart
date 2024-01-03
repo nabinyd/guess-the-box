@@ -41,7 +41,7 @@ mixin CustomComponents {
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Text(
-              "You will losse your prizes by leaving",
+              "You will lose your prizes by leaving.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 19,

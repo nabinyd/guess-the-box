@@ -89,13 +89,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       setState(() {
         isContainerTapped[selectedContainer] = true;
         displaysuffledimage = suffledRewards![selectedContainer];
-        if (level == 3) {
-          rewards.add("assets/bomby.jpg");
-        }
+
         if (level % 5 == 0) {
           jackpotlevel = level + 5;
         }
       });
+      if (level == 3) {
+        rewards.add("assets/bomby.jpg");
+      }
     }
 
     Future.delayed(const Duration(seconds: 1), () {
@@ -115,6 +116,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         setState(() {
           isGameOver = true;
         });
+
         Timer(const Duration(seconds: 1), () {
           nextlevel(selectedContainer);
         });
@@ -134,9 +136,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         showLeaveWithRewardButton = true;
         // rewards.add("assets/bomby.jpg");
       }
-      // if (level < 3) {
-      //   rewards.remove("assets/bomby.jpg");
-      // }
     });
 
     if (suffledRewards![selectedContainer] == 'assets/reward1.jpg') {
@@ -166,9 +165,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           duration: const Duration(milliseconds: 500),
           curve: Curves.linear);
       showLeaveWithRewardButton = false;
-      if (level >= 3) {
-        // rewards.add("assets/bomby.jpg");
-      }
+      rewards.remove("assets/bomby.jpg");
     });
   }
 

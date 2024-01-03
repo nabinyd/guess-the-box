@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:guess_the_box/componennts/components.dart';
 import 'package:guess_the_box/constant/constant.dart';
+import 'package:guess_the_box/screen/homepage/homescreen.dart';
 
 class LostDialogBox extends StatefulWidget {
   final String displaysuffledimage;
@@ -217,10 +218,11 @@ class _LostDialogBoxState extends State<LostDialogBox> {
                       setState(() {
                         widget.isGameOver = true;
                       });
-                      Timer(const Duration(seconds: 1), () {
+                      Timer(const Duration(milliseconds: 400), () {
                         widget.playAgain();
                       });
-                      Navigator.of(context).pop();
+                      Navigator.of(context)
+                          .pushReplacementNamed(HomePage.routename);
                     },
                     child: Container(
                       width: 150,

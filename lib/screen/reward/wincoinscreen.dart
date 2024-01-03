@@ -4,11 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_the_box/screen/homepage/homescreen.dart';
+import 'package:guess_the_box/screen/homepage/mainscreen.dart';
 
 class CoinScreen extends StatefulWidget {
   int coin;
-   VoidCallback playagain;
-  CoinScreen({super.key, required this.coin,required this.playagain});
+  VoidCallback playagain;
+  CoinScreen({super.key, required this.coin, required this.playagain});
 
   @override
   State<CoinScreen> createState() => _CoinScreenState();
@@ -172,8 +173,8 @@ class _CoinScreenState extends State<CoinScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  
-                  Navigator.of(context).pushNamed(HomePage.routename);
+                  Navigator.of(context)
+                      .pushReplacementNamed(MainScreen.routename);
                 },
                 style: ButtonStyle(
                   side: const MaterialStatePropertyAll(BorderSide(
