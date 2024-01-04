@@ -2,18 +2,14 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:guess_the_box/componennts/components.dart';
 import 'package:guess_the_box/componennts/leavewithreward.dart';
-import 'package:guess_the_box/componennts/messagescreen.dart';
-import 'package:guess_the_box/componennts/pushnotification.dart';
-import 'package:guess_the_box/constant/constant.dart';
 import 'package:guess_the_box/services/firebaseservice.dart';
 import 'package:guess_the_box/screen/auth/loginscreen.dart';
 import 'package:guess_the_box/screen/reward/lostdialogbox.dart';
@@ -78,6 +74,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     if (selectedContainer == bombcontainerindex) {
       setState(() {
         isContainerTapped[selectedContainer] = true;
+        CustomComponents.playsound("sounds/arcade_game_explaode.wav");
         Timer(const Duration(milliseconds: 100), () {
           isGameOver = true;
           rewards.remove("assets/bomby.jpg");
@@ -88,6 +85,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     } else {
       setState(() {
         isContainerTapped[selectedContainer] = true;
+        CustomComponents.playsound("sounds/dumbell_pins_at_gym.wav");
         displaysuffledimage = suffledRewards![selectedContainer];
 
         if (level % 5 == 0) {
@@ -117,7 +115,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           isGameOver = true;
         });
 
-        Timer(const Duration(seconds: 1), () {
+        Timer(const Duration(seconds: 3), () {
           nextlevel(selectedContainer);
         });
       }
@@ -156,6 +154,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void playAgain() async {
     setState(() {
       isGameOver = false;
+
       level = 1;
       coin = 0;
       countbox = 0;
@@ -312,12 +311,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               ],
                             ),
                             InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 CustomComponents.infoDialog(context);
-                                PushnotificationApi.sendNotification();
+                                CustomComponents.playsound("sounds/sounds.mp3");
                               },
-                              child: const Icon(Icons.info_outline_rounded,
-                                  color: Colors.lightBlueAccent, size: 28),
+                              child: const Icon(
+                                Icons.info_outline_rounded,
+                                color: Colors.lightBlueAccent,
+                                size: 28,
+                              ),
                             ),
                           ],
                         ),
@@ -494,14 +496,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 .moveX(duration: 300.ms, begin: 300)
                                 .shake(
                                     delay: 400.milliseconds,
-                                    hz: 3,
+                                    duration: 1.seconds,
+                                    hz: 1,
                                     rotation: 0.2)
                                 .fade(duration: 400.milliseconds, delay: 100.ms)
                                 .shake(
-                                    delay: 1.seconds,
-                                    duration: 700.ms,
-                                    hz: 2.2,
-                                    rotation: 0.25)
+                                    delay: 0.5.seconds,
+                                    duration: 2.seconds,
+                                    hz: 0.7,
+                                    rotation: 0.15)
                                 .fade(delay: 200.ms, duration: 400.ms)
                             : Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -528,8 +531,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 .animate()
                                 .shake(
                                     delay: 400.milliseconds,
-                                    hz: 3,
-                                    rotation: 0.2),
+                                    duration: 1.seconds,
+                                    hz: 0.8,
+                                    rotation: 0.2)
+                                .move(delay: 2.seconds),
                       );
                     },
                   ),

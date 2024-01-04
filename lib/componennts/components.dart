@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:guess_the_box/screen/homepage/homescreen.dart';
@@ -217,5 +218,19 @@ mixin CustomComponents {
         );
       },
     );
+  }
+
+  static void playsound(String soundFilename) async {
+    AudioPlayer player = AudioPlayer()..setPlayerMode(PlayerMode.lowLatency);
+    await player.play(
+      AssetSource(soundFilename),
+    );
+  }
+
+  static void playSoundInLoop(String soundFilename) async {
+    final player = AudioPlayer()
+      ..setPlayerMode(PlayerMode.mediaPlayer)
+      ..setReleaseMode(ReleaseMode.loop);
+    await player.play(AssetSource(soundFilename));
   }
 }
