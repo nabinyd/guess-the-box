@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:guess_the_box/componennts/components.dart';
 import 'package:guess_the_box/constant/constant.dart';
 import 'package:guess_the_box/screen/homepage/homescreen.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class MainScreen extends StatefulWidget {
   static const String routename = "/mainscreen";
@@ -12,6 +15,17 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    super.initState();
+    CustomComponents.playsound("sounds/Pikmin.mp3");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -80,15 +94,25 @@ class _MainScreenState extends State<MainScreen> {
                     height: 40,
                     alignment: Alignment.center,
                     color: const Color.fromARGB(255, 51, 15, 2),
-                    child: const Text(
-                      "Guaranteed prizes every 5 level ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
+                    child: Text(
+                      'Guaranteed prizes every 5 level',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.dmMono(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: const Color.fromARGB(255, 235, 214, 207),
+                          shadows: [
+                            const Shadow(
+                                color: Color.fromARGB(255, 133, 65, 40),
+                                blurRadius: 10,
+                                offset: Offset(1, 1))
+                          ]),
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 20,
               ),
               Stack(alignment: Alignment.bottomCenter, children: [
                 Image.asset(
@@ -99,17 +123,55 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 Image.asset(
                   "assets/boxopen.png",
-                  height: 230,
+                  height: 200,
                   width: size.width,
                   fit: BoxFit.contain,
-                ),
-                const Text(
-                  "Guess The Box",
-                  style: TextStyle(
-                      fontSize: 28,
+                )
+                    .animate(
+                        autoPlay: true,
+                        onPlay: (controller) {
+                          controller.repeat(reverse: true);
+                        })
+                    .moveY(
+                        duration: 2.seconds,
+                        curve: Curves.linear,
+                        transformHitTests: true,
+                        begin: 0,
+                        end: -5)
+                    .shake(
+                        // delay: 200.ms,
+                        duration: 5.seconds,
+                        curve: Curves.linear,
+                        hz: 0.26,
+                        rotation: 0.08),
+                // .shake(duration: 2.seconds, rotation: 0.2, hz: 0.5),
+                GradientText(
+                  'Guess The Box',
+                  style: GoogleFonts.firaCode(
+                      fontSize: 30,
                       fontWeight: FontWeight.w900,
-                      color: Colors.white),
-                ),
+                      shadows: [
+                        const Shadow(
+                          color: Color.fromARGB(255, 87, 62, 52),
+                          offset: Offset(4, 4),
+                          blurRadius: 15.0,
+                        )
+                      ]),
+                  colors: const [
+                    Color.fromARGB(255, 227, 215, 214),
+                    Color.fromARGB(255, 223, 218, 218),
+                  ],
+                )
+                    .animate(
+                        autoPlay: true,
+                        onPlay: (controller) {
+                          controller.repeat();
+                        })
+                    .shake(
+                        duration: 5.seconds,
+                        // curve: Curves.ease,
+                        hz: 0.2,
+                        rotation: 0.02),
               ]),
               Expanded(
                 flex: 2,
