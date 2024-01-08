@@ -54,6 +54,7 @@ mixin CustomComponents {
           actions: [
             InkWell(
               onTap: () {
+                CustomComponents.playsound("sounds/gearfastlock.wav");
                 Navigator.pushReplacementNamed(context, MainScreen.routename);
               },
               child: Container(
@@ -95,6 +96,7 @@ mixin CustomComponents {
             ),
             InkWell(
               onTap: () {
+                CustomComponents.playsound("sounds/gearfastlock.wav");
                 Navigator.of(context).popAndPushNamed(HomePage.routename);
               },
               child: Container(
@@ -157,6 +159,7 @@ mixin CustomComponents {
             ),
             trailing: IconButton.outlined(
               onPressed: () {
+                CustomComponents.playsound("sounds/gearfastlock.wav");
                 Navigator.of(context).pop();
               },
               color: Colors.red,

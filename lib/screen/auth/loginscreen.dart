@@ -58,7 +58,7 @@ class _LogInPageState extends State<LogInPage> {
                         color: Color.fromARGB(255, 82, 23, 0),
                       ),
                       child: Text(
-                        "Skip",
+                        "skip >",
                         style: GoogleFonts.poppins(
                           fontSize: 20,
                           color: Colors.white,

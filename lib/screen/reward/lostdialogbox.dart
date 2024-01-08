@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:guess_the_box/componennts/components.dart';
 import 'package:guess_the_box/constant/constant.dart';
 import 'package:guess_the_box/screen/homepage/homescreen.dart';
+import 'package:guess_the_box/screen/homepage/mainscreen.dart';
 
 class LostDialogBox extends StatefulWidget {
   final String displaysuffledimage;
@@ -164,6 +165,7 @@ class _LostDialogBoxState extends State<LostDialogBox> {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      CustomComponents.playsound("sounds/gearfastlock.wav");
                       CustomComponents.showGiveUpDialog(context);
                     },
                     child: Container(
@@ -215,6 +217,7 @@ class _LostDialogBoxState extends State<LostDialogBox> {
                   ),
                   InkWell(
                     onTap: () {
+                      CustomComponents.playsound("sounds/gearfastlock.wav");
                       setState(() {
                         widget.isGameOver = true;
                       });
@@ -222,7 +225,7 @@ class _LostDialogBoxState extends State<LostDialogBox> {
                         widget.playAgain();
                       });
                       Navigator.of(context)
-                          .pushReplacementNamed(HomePage.routename);
+                          .pushReplacementNamed(MainScreen.routename);
                     },
                     child: Container(
                       width: 150,
