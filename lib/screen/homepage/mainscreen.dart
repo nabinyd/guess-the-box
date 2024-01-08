@@ -120,7 +120,23 @@ class _MainScreenState extends State<MainScreen> {
                   height: 250,
                   width: size.width,
                   fit: BoxFit.contain,
-                ),
+                )
+                    .animate(
+                        autoPlay: true,
+                        onPlay: (controller) {
+                          controller.repeat(reverse: false);
+                        })
+                    .scale(
+                        duration: 2.seconds,
+                        curve: Curves.easeInOutQuad,
+                        begin: const Offset(1.2, 1.2),
+                        end: const Offset(1.3, 1.3))
+                    .shake(
+                        // delay: 200.ms,
+                        duration: 6.seconds,
+                        curve: Curves.easeInOut,
+                        hz: 0.2,
+                        rotation: 0.02),
                 Image.asset(
                   "assets/boxopen.png",
                   height: 200,
@@ -428,8 +444,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.pushReplacementNamed(
-                            context, HomePage.routename);
+                        Navigator.pushNamed(context, HomePage.routename);
                       },
                       child: Container(
                         height: 50,

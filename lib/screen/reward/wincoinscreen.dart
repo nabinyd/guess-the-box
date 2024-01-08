@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guess_the_box/componennts/components.dart';
 import 'package:guess_the_box/screen/homepage/homescreen.dart';
 import 'package:guess_the_box/screen/homepage/mainscreen.dart';
 
@@ -173,6 +174,7 @@ class _CoinScreenState extends State<CoinScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  CustomComponents.playsound("sounds/gearfastlock.wav");
                   Navigator.of(context)
                       .pushReplacementNamed(MainScreen.routename);
                 },

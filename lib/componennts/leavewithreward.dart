@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:guess_the_box/componennts/components.dart';
 import 'package:guess_the_box/screen/homepage/homescreen.dart';
 import 'package:guess_the_box/services/firebaseservice.dart';
 import 'package:guess_the_box/screen/auth/loginscreen.dart';
@@ -79,6 +82,7 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
             actions: [
               InkWell(
                 onTap: () {
+                  CustomComponents.playsound("sounds/gearfastlock.wav");
                   // User? user =
                   //     await FirebaseLoginServices().signInwithGoogle(context);
                   // if (user != null && mounted) {
@@ -133,6 +137,7 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
               ),
               InkWell(
                 onTap: () {
+                  CustomComponents.playsound("sounds/gearfastlock.wav");
                   Navigator.of(context).pop();
                 },
                 child: Container(
@@ -217,9 +222,12 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
                 onTap: () async {
                   await CoinManager.saveCoins(
                       widget.userId.toString(), widget.coin);
+                  CustomComponents.playsound("sounds/gearfastlock.wav");
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => CoinScreen(
-                          coin: widget.coin, playagain: widget.playAgain)));
+                    builder: (context) => CoinScreen(
+                        coin: widget.coin, playagain: widget.playAgain),
+                  ));
+                  
                 },
                 child: Container(
                   width: 100,
@@ -260,6 +268,7 @@ class _LeaveWithRewardState extends State<LeaveWithReward> {
               ),
               InkWell(
                 onTap: () {
+                  CustomComponents.playsound("sounds/gearfastlock.wav");
                   Navigator.of(context).pop();
                 },
                 child: Container(

@@ -52,6 +52,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   int countbox = 0;
   int jackpotlevel = 5;
   bool showLeaveWithRewardButton = false;
+  int selectedContainerIndex = -1;
+  bool showImage = false;
 
   /* -------------------------------- function -------------------------------- */
   loadCoin() async {
@@ -75,30 +77,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       setState(() {
         isContainerTapped[selectedContainer] = true;
         CustomComponents.playsound("sounds/arcade_game_explaode.wav");
-        Timer(const Duration(milliseconds: 100), () {
+        Timer(const Duration(milliseconds: 0), () {
           isGameOver = true;
           rewards.remove("assets/bomby.jpg");
         });
 
         displaysuffledimage = suffledRewards![selectedContainer];
-      });
-    } else {
-      setState(() {
-        isContainerTapped[selectedContainer] = true;
-        CustomComponents.playsound("sounds/dumbell_pins_at_gym.wav");
-        displaysuffledimage = suffledRewards![selectedContainer];
-
-        if (level % 5 == 0) {
-          jackpotlevel = level + 5;
-        }
-      });
-      if (level == 3) {
-        rewards.add("assets/bomby.jpg");
-      }
-    }
-
-    Future.delayed(const Duration(seconds: 1), () {
-      if (selectedContainer == bombcontainerindex) {
         showDialog(
           context: context,
           builder: (_) {
@@ -110,16 +94,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 points: coin);
           },
         );
-      } else {
-        setState(() {
-          isGameOver = true;
-        });
-
-        Timer(const Duration(seconds: 3), () {
+      });
+    } else {
+      CustomComponents.playsound("sounds/dumbell_pins_at_gym.wav");
+      setState(() {
+        isContainerTapped[selectedContainer] = true;
+        isGameOver = true;
+        Timer(const Duration(seconds: 4), () {
           nextlevel(selectedContainer);
         });
-      }
-    });
+        displaysuffledimage = suffledRewards![selectedContainer];
+        level % 5 == 0 ? jackpotlevel = level + 5 : null;
+      });
+      level == 3 ? rewards.add("assets/bomby.jpg") : null;
+    }
   }
 
   void nextlevel(int selectedContainer) {
@@ -130,21 +118,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     setState(() {
       isGameOver = false;
       level++;
+      showImage = false;
       if (level >= 3) {
         showLeaveWithRewardButton = true;
-        // rewards.add("assets/bomby.jpg");
       }
     });
+    updateRewards(selectedContainer);
+  }
 
-    if (suffledRewards![selectedContainer] == 'assets/reward1.jpg') {
+  void updateRewards(int selectedContainer) {
+    String selectedReward = suffledRewards![selectedContainer];
+    if (selectedReward == 'assets/reward1.jpg') {
       coin += 50;
-    } else if (suffledRewards![selectedContainer] == 'assets/reward2.jpeg') {
+    } else if (selectedReward == 'assets/reward2.jpeg') {
       coin += 100;
-    } else if (suffledRewards![selectedContainer] == 'assets/reward4.jpg') {
+    } else if (selectedReward == 'assets/reward4.jpg') {
       coin += 200;
-    } else if (suffledRewards![selectedContainer] == 'assets/bomby.jpg') {
+    } else if (selectedReward == 'assets/bomby.jpg') {
       coin += 0;
-    } else if (suffledRewards![selectedContainer] == "assets/rewardbox.jpg") {
+    } else if (selectedReward == "assets/rewardbox.jpg") {
       setState(() {
         countbox++;
       });
@@ -175,6 +167,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     // print("userID = $userId");
+    print("showimage = $showImage");
 
     return Scaffold(
       extendBody: false,
@@ -240,6 +233,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           userId == null
                               ? IconButton(
                                   onPressed: () async {
+                                    CustomComponents.playsound(
+                                        "sounds/gearfastlock.wav");
                                     await FirebaseLoginServices().signOut();
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -253,6 +248,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   ))
                               : IconButton(
                                   onPressed: () async {
+                                    CustomComponents.playsound(
+                                        "sounds/gearfastlock.wav");
                                     await FirebaseLoginServices().signOut();
                                     // await CoinManager.saveCoins(
                                     //     userId.toString(), coin);
@@ -313,7 +310,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             InkWell(
                               onTap: () async {
                                 CustomComponents.infoDialog(context);
-                                CustomComponents.playsound("sounds/sounds.mp3");
+                                CustomComponents.playsound(
+                                    "sounds/gearfastlock.wav");
                               },
                               child: const Icon(
                                 Icons.info_outline_rounded,
@@ -341,7 +339,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                     ),
                     /* -------------------------------- level row ------------------------------- */
-                    levelRow(
+                    LevelRow(
                         itemScrollController: itemScrollController,
                         level: level),
                     Material(
@@ -467,74 +465,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           if (!isGameOver) {
                             onContainerTap(index, context);
                           }
+                          selectedContainerIndex = index;
                           print("the selected box = $index");
                         },
                         child: !isGameOver
-                            ? Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Container(
-                                    decoration: BoxDecoration(boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            const Color.fromARGB(255, 79, 1, 1)
-                                                .withOpacity(0.4),
-                                        spreadRadius: 8,
-                                        blurRadius: 25,
-                                        offset: const Offset(1, 1),
-                                      )
-                                    ]),
-                                    child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                        child: Image.asset(
-                                          'assets/rewardimage.jpeg',
-                                          fit: BoxFit.cover,
-                                        ))),
-                              )
+                            ? const ShowDefaultImage()
                                 .animate()
-                                .moveX(duration: 300.ms, begin: 300)
+                                .moveX(duration: 300.ms, begin: 500)
                                 .shake(
-                                    delay: 400.milliseconds,
-                                    duration: 1.seconds,
-                                    hz: 1,
-                                    rotation: 0.2)
-                                .fade(duration: 400.milliseconds, delay: 100.ms)
-                                .shake(
-                                    delay: 0.5.seconds,
-                                    duration: 2.seconds,
-                                    hz: 0.7,
-                                    rotation: 0.15)
-                                .fade(delay: 200.ms, duration: 400.ms)
-                            : Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15),
-                                    child: Container(
-                                      decoration: BoxDecoration(boxShadow: [
-                                        BoxShadow(
-                                          color: const Color.fromARGB(
-                                                  255, 79, 1, 1)
-                                              .withOpacity(0.4),
-                                          spreadRadius: 8,
-                                          blurRadius: 10,
-                                          offset: const Offset(1, 1),
-                                        )
-                                      ]),
-                                      child: ClipRRect(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(20)),
-                                          child: Image.asset(
-                                            suffledRewards![index],
-                                            fit: BoxFit.cover,
-                                          )),
-                                    ))
-                                .animate()
-                                .shake(
-                                    delay: 400.milliseconds,
+                                    delay: 200.milliseconds,
                                     duration: 1.seconds,
                                     hz: 0.8,
                                     rotation: 0.2)
-                                .move(delay: 2.seconds),
+                            : selectedContainerIndex == index
+                                ? showSelectedImage(index)
+                                : RevealRemainingContainer(
+                                    imagepath: suffledRewards![index],
+                                  ),
                       );
                     },
                   ),
@@ -586,6 +533,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ? Flexible(
                             child: InkWell(
                               onTap: () async {
+                                CustomComponents.playsound(
+                                    "sounds/gearfastlock.wav");
                                 showDialog(
                                     context: context,
                                     barrierDismissible: false,
@@ -641,10 +590,116 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     );
   }
+
+  Animate showSelectedImage(int index) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Container(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(255, 79, 1, 1).withOpacity(0.4),
+            spreadRadius: 8,
+            blurRadius: 10,
+            offset: const Offset(1, 1),
+          )
+        ]),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          child: Image.asset(
+            suffledRewards![index],
+            fit: BoxFit.cover,
+          ).animate().scale(
+              curve: Curves.bounceInOut,
+              begin: const Offset(2, 2),
+              end: const Offset(1, 1),
+              duration: 200.ms),
+        ),
+      ),
+    )
+        .animate()
+        .shake(delay: 3.seconds, duration: 1.seconds, hz: 0.6, rotation: 0.2)
+        .moveX(delay: 4.seconds, duration: 300.ms, end: -400);
+  }
 }
 
-class levelRow extends StatelessWidget {
-  const levelRow({
+class ShowDefaultImage extends StatelessWidget {
+  const ShowDefaultImage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Container(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(255, 79, 1, 1).withOpacity(0.4),
+            spreadRadius: 8,
+            blurRadius: 25,
+            offset: const Offset(1, 1),
+          )
+        ]),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          child: Image.asset(
+            'assets/rewardimage.jpeg',
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RevealRemainingContainer extends StatelessWidget {
+  final String imagepath;
+  const RevealRemainingContainer({super.key, required this.imagepath});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: Future.delayed(const Duration(seconds: 2)),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Container(
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                  color: const Color.fromARGB(255, 79, 1, 1).withOpacity(0.4),
+                  spreadRadius: 8,
+                  blurRadius: 10,
+                  offset: const Offset(1, 1),
+                )
+              ]),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                child: Image.asset(
+                  imagepath,
+                  fit: BoxFit.cover,
+                ).animate().scale(
+                    curve: Curves.bounceInOut,
+                    begin: const Offset(2, 2),
+                    end: const Offset(1, 1),
+                    duration: 100.ms),
+              ),
+            ),
+          )
+              .animate()
+              .shake(
+                  delay: 1.seconds, duration: 1.seconds, hz: 0.6, rotation: 0.2)
+              .moveX(delay: 2.seconds, duration: 300.ms, end: -400);
+        } else {
+          return const ShowDefaultImage();
+        }
+      },
+    );
+  }
+}
+
+class LevelRow extends StatelessWidget {
+  const LevelRow({
     super.key,
     required this.itemScrollController,
     required this.level,
